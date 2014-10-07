@@ -1,0 +1,33 @@
+{
+  "name": "git-orm-fs",
+  "version": "0.0.1",
+  "description": "FS driver for git-orm",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gitstarinc/git-orm-fs.git"
+  },
+  "keywords": [
+    "git"
+  ],
+  "author": "GitStar Inc.",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gitstarinc/git-orm-fs/issues"
+  },
+  "homepage": "https://github.com/gitstarinc/git-orm-fs",
+  "dependencies": {
+    "async": "^0.9.0",
+    "debug": "^2.0.0",
+    "git-orm": "^0.0.2",
+    "git-orm-nodegit-http": "^0.0.1",
+    "underscore": "^1.7.0",
+    "util-is": "^0.1.0"
+  },
+  "devDependencies": {
+    "should": "^4.0.4"
+  }
+}
