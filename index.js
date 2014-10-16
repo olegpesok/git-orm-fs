@@ -68,26 +68,22 @@ var getContent = function(filename, self, checker) {
 
         debug('Received tree ' + tree.sha);
 
-        var foundEntry = false;
         for (var i = 0; i < tree.entries.length; i++) {
             var entry = tree.entries[i];
             if (filePath[0] === entry.path) {
-                foundEntry = true;
                 filePath.shift();
                 if (filePath.length === 0) {
                     debug('Checking entry for correct type.');
                     return checker(null, entry);
                 } else {
                     debug('Recursing tree ' + entry.sha);
-                    debug('Path is "' + filePath + '"');
                     return self.repo.getTree(entry.sha, getNext);
                 }
             }
         }
-        if (!foundEntry) {
-            debug('Path entry notfound "' + filePath + '"');
-            return checker(new Error('Path entry not found'));
-        }
+
+        debug('Path entry notfound "' + filename + '"');
+        return checker(new Error('Path entry not found'));
     };
 
     debug('Querying ref ' + self.branch);
