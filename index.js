@@ -37,7 +37,7 @@ function GitOrmFs(options) {
     debug('Done configuring repo.');
 }
 
-var getContent = function(filename, self, checker) {
+var getContent = function (filename, self, checker) {
     var filePath = path.normalize(filename);
     // We can't go anywhere below the current tree we're on.
     debug('Opening path: ' + filename);
@@ -112,7 +112,7 @@ var getContent = function(filename, self, checker) {
     });
 };
 
-GitOrmFs.prototype.readFile = function(filename, callback) {
+GitOrmFs.prototype.readFile = function (filename, callback) {
     var self = this;
 
     var getData = function (err, blob) {
@@ -136,11 +136,11 @@ GitOrmFs.prototype.readFile = function(filename, callback) {
     });
 };
 
-GitOrmFs.prototype.readdir = function(path, callback) {
+GitOrmFs.prototype.readdir = function (path, callback) {
     var self = this;
 
     var getDir = function (err, tree) {
-        callback(err, tree ? _.map(tree.entries, function(entry) {
+        callback(err, tree ? _.map(tree.entries, function (entry) {
             return entry.path;
         }) : undefined);
     };
