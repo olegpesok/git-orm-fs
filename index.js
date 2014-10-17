@@ -159,3 +159,35 @@ GitOrmFs.prototype.readdir = function (path, callback) {
         }
     });
 };
+
+GitOrmFs.prototype.read = function (path, callback) {
+    var self = this;
+
+    var getData = function (err, blob) {
+        callback(err, blob ? blob.content : undefined);
+    };
+
+    getContent(path, self, function (err, entry) {
+        if (err) {
+            return err;
+        }
+
+        if (entry instanceof git.Tree || (entry.type && entry.type.isTree)) {
+            debug('Returning file.');
+            self.repo.getTree(entry.sha, function (err, tree) {
+                callback(err, tree ? _.map(tree.entries, function (entry) {
+                    return entry.path;
+                }) : undefined);
+            });
+
+        } else if (entry.type.isBlob) {
+            debug('Returning file.');
+            self.repo.getBlob(entry.sha, function (err, blob) {
+                callback(err, blob ? blob.content : undefined);
+            });
+        } else {
+            debug('Object is neither a tree nor blob.');
+            getData(new Error('Unsupported object type'));
+        }
+    });
+};
