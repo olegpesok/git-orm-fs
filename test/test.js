@@ -1,8 +1,10 @@
 var GitOrmFs = require('../index');
 var should = require('should');
+var _ = require('underscore');
 
 var fs = new GitOrmFs({
-    url: 'https://api.github.com',
+    //url: 'https://api.github.com',
+    url: 'http://localhost:3000',
     headers: { encoding: 'utf-8' },
     user: 'GitStarInc',
     repo: 'git-orm-testrepo',
@@ -63,17 +65,17 @@ function fileTester(testPath) {
 
 describe('fs', function() {
     describe('#readdir', function() {
-        for (var i = 0; i < testPaths.length; i++) {
-            dirTester(testPaths[i]);
-        }
+        _.each(testPaths, function (testPath) {
+            dirTester(testPath);
+        });
     });
 });
 
 describe('fs', function() {
     describe('#readFile', function() {
-        for (var i = 0; i < testPaths.length; i++) {
-            fileTester(testPaths[i]);
-        }
+        _.each(testPaths, function (testPath) {
+            fileTester(testPath);
+        });
     });
 });
 
