@@ -68,22 +68,23 @@ var getContent = function (filename, self, checker) {
 
         debug('Received tree ' + tree.sha);
 
-        for (var i = 0; i < tree.entries.length; i++) {
-            var entry = tree.entries[i];
-            if (filePath[0] === entry.path) {
-                filePath.shift();
-                if (filePath.length === 0) {
-                    debug('Checking entry for correct type.');
-                    return checker(null, entry);
-                } else {
-                    debug('Recursing tree ' + entry.sha);
-                    return self.repo.getTree(entry.sha, getNext);
-                }
-            }
-        }
+        var foundPaths = _.find(tree.entries, function (entry) {
+            return filePath[0] === entry.path;
+        });
 
-        debug('Path entry notfound "' + filename + '"');
-        return checker(new Error('Path entry not found'));
+        if (foundPaths.length === 1) {
+            filePath.shift();
+            if (filePath.length === 0) {
+                debug('Checking entry for correct type.');
+                return checker(null, entry);
+            } else {
+                debug('Recursing tree ' + entry.sha);
+                return self.repo.getTree(entry.sha, getNext);
+            }
+        } else {
+            debug('Path entry notfound "' + filename + '"');
+            return checker(new Error('Path entry not found'));
+        }
     };
 
     debug('Querying ref ' + self.branch);
@@ -123,6 +124,7 @@ GitOrmFs.prototype.readFile = function (filename, callback) {
         if (err) {
             return getData(err);
         }
+
         if (entry instanceof git.Tree || (entry.type && entry.type.isTree)) {
             debug('Entry is not a file, but a directory.');
             getData(new Error('EISDIR'));
@@ -169,7 +171,7 @@ GitOrmFs.prototype.read = function (path, callback) {
 
     getContent(path, self, function (err, entry) {
         if (err) {
-            return err;
+            return getData(err);
         }
 
         if (entry instanceof git.Tree || (entry.type && entry.type.isTree)) {
