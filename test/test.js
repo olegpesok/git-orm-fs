@@ -3,8 +3,7 @@ var should = require('should');
 var _ = require('underscore');
 
 var fs = new GitOrmFs({
-    //url: 'https://api.github.com',
-    url: 'http://localhost:3000',
+    url: 'https://api.github.com',
     headers: { encoding: 'utf-8' },
     user: 'GitStarInc',
     repo: 'git-orm-testrepo',
