@@ -68,18 +68,18 @@ var getContent = function (filename, self, checker) {
 
         debug('Received tree ' + tree.sha);
 
-        var foundPaths = _.find(tree.entries, function (entry) {
+        var foundPath = _.find(tree.entries, function (entry) {
             return filePath[0] === entry.path;
         });
 
-        if (foundPaths.length === 1) {
+        if (foundPath) {
             filePath.shift();
             if (filePath.length === 0) {
                 debug('Checking entry for correct type.');
-                return checker(null, entry);
+                return checker(null, foundPath);
             } else {
-                debug('Recursing tree ' + entry.sha);
-                return self.repo.getTree(entry.sha, getNext);
+                debug('Recursing tree ' + foundPath.sha);
+                return self.repo.getTree(foundPath.sha, getNext);
             }
         } else {
             debug('Path entry notfound "' + filename + '"');
